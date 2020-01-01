@@ -16,6 +16,8 @@ react는 소스코드에 처음부터 HTML을 넣지 않고, HTML에서 HTML을 
 react는 virtual DOM(virtual document object model)이라는 것이 있다. 즉 소스코드에는 존재하지 않지만 react가 만들어낸다.
 이것이 react가 빠른 이유이다.
 
+react가 멋진 이유는 재사용 가능한 component를 만들 수 있다는 점이다.(component를 계속해서 반복해서 사용할 수 있다는 것)
+
 ---
 
 ## component
@@ -46,5 +48,19 @@ export default Potato; '''
 
 react application이 한번에 하나의 component만을 rendering 할 수 있다. 따라서 모든 것은 application안에 들어가야한다.
 
-jsx는 javascript안의 HTMLd을 말하며, react에서 나온 매우 custom한 유일한 개념이다.
+---
 
+jsx
+- jsx는 javascript안의 HTMLd을 말하며, react에서 나온 매우 custom한 유일한 개념이다.
+- jsx에서 두번째로 이해해야하는 것은 component에 정보를 보낼 수 있다는 점이다.
+
+
+component에서 component로, children component로 정보를 보내는 방법 학습하기
+component는 대문자로 시작해야한다. 우리는 component로 정보를 보낼 수 있다.
+jsx는 html처럼 사용한다.
+
+<Food name="kimchi" />
+food component에 kimchi라는 value로 prop(property) name(kimchi)을 줌
+그 다음 food function component의 argument로 그것들을 넣음
+
+props학습
