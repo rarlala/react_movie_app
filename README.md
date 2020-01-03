@@ -103,3 +103,20 @@ function Food({name, picture}){
 }
 ```
 
+
+
+추가적으로 위에 App()에 작성했던 코드를 함수를 호출하는 방식으로 아래와 같이 변경할 수 있다.
+
+```javascript
+function renderFood(dish){
+  return <Food key={dish.id} name={dish.name} picture={dish.image} />
+}
+
+function App() {
+  return (
+    <div>
+      {foodILike.map(renderFood)}
+    </div>
+  );
+}
+```
