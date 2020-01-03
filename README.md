@@ -120,3 +120,32 @@ function App() {
   );
 }
 ```
+
+
+
+## Protection with PropTypes
+
+
+
+### props type
+
+- 설치 : `npm i prop-types`
+
+- 전달받은 props가 내가 원하는 props인지 확인해준다.
+
+- 사용방법
+
+```javascript
+import PropTypes from "prop-types"
+
+// 내가 얻고 싶은 props에 대한 설명을 적음
+Food.propTypes = {
+  name: PropTypes.string.isRequired,
+  picture: PropTypes.string.isRequired,
+  rating: PropTypes.number.isRequired
+};
+```
+
+얻고자 하는 PropType을 위와같이 적게되면 얻고자 하는 정보와 다를 경우 console.log에 에러메세지가 나타나며, 반드시 이름은 propTypes으로 지어야한다.
+
+이외에 설정할 수 있는 항목들은 document를 확인하자. (https://doc.ebichu.cc/react/docs/typechecking-with-proptypes.html)
