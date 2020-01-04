@@ -654,5 +654,137 @@ class App extends React.Component{
 
 
 
+### movies.data 가져오기
+
+console로 movie를 보면 우리가 가져올 데이터의 경로는 moives.data.data.movies임을 확인할 수 있다.
+
+```react
+class App extends React.Component{
+  state = {
+    isLoading: true,
+    movies: []
+  };
+  getMovies = async() => {
+    const {data:{data:{movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json")
+    console.log(movies);
+  };
+  async componentDidMount(){
+    this.getMovies();
+  }
+  render() {
+    const { isLoading } = this.state;
+    return <div>{isLoading ? "Loading" : "We are ready"}</div>
+  }
+}s
+```
 
 
+
+
+
+### 가져온 movie.data를 state안에 넣기
+
+```react
+  getMovies = async() => {
+    const {data:{data:{movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json");
+    this.setState({movies, isLoading: false});
+  };
+```
+
+여기 `this.setState({movies:movie});`코드에 하나는 setState의 movies고, 하나는 axios에서 온 movies다.
+
+위 코드를 실행하게 되면 movies 데이터를 모두 가져왔을 때, "We are ready"가 출력된다.
+
+
+
+### Movie.js 파일 생성
+
+movie component는 state를 필요로하지 않기 때문에 class component가 될 필요는 없다.
+
+따라서 function component로 작성하겠다.
+
+
+
+API에서 가져올 정보에 대해 아래와 같이 작성한다.
+
+```react
+# Movie.js
+
+import React from "react";
+import PropTypes from "prop-types";
+
+function Movie({ id, year, title, summary, poster }) {
+  return <h4>{title}</h4>;
+}
+
+Movie.propTypes = {
+  id: PropTypes.number.isRequired,
+  year: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  summary: PropTypes.string.isRequired,
+  poster: PropTypes.string.isRequired
+};
+
+export default Movie;
+```
+
+
+
+정렬을 하기위해 API에서 제공하는 sort_by 속성을 이용해 App.js에 해당 부분을 아래와 같이 수정하였다.
+
+```react
+const {data:{data:{movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
+```
+
+
+
+App.js에서 Movie를 render를 해줘야한다.
+
+```react
+// App.js
+
+import React from 'react';
+import axios from 'axios';
+import Movie from './Movie';
+
+class App extends React.Component{
+
+  state = {
+    isLoading: true,
+    movies: []
+  };
+
+  getMovies = async() => {
+    const {data:{data:{movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
+    this.setState({movies, isLoading: false});
+  };
+
+  componentDidMount(){
+    this.getMovies();
+  };
+
+  render() {
+    const { isLoading, movies } = this.state;
+      return (
+        <div>
+          {isLoading
+            ? "Loading..."
+            : movies.map(movie => (
+                <Movie
+                  key={movie.id}
+                  id={movie.id}
+                  year={movie.year}
+                  title={movie.title}
+                  summary={movie.summary}
+                  poster={movie.medium_cover_image}
+                />
+              ))}
+        </div>
+    );
+  };
+}
+
+export default App;
+```
+
+여기까지 하면 title 목록이 정상적으로 출력된다.
