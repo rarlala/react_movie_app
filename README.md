@@ -251,3 +251,65 @@ class App extends React.Component{
 }
 ```
 
+
+
+state를 set해라, 직접 state를 변경하지 말라고 한다.
+
+이유는 react는 render function을 refresh하지 않기 때문이다.
+
+
+
+우리는 매번 state 상태를 변경할 때 react가 render function을 호출해서 바꿔주길 원한다.
+
+react는 우리가 setState function을 호출하면, react는 매우 똑똑해서 우리가 언제 setState를 호출할 지를 알고 또한 내가 view를 refresh하길 원하는 걸알고 render function을 refresh하길 원하는 걸 안다.
+
+
+
+아래와 같이 코드를 바꿔보자
+
+```javascript
+class App extends React.Component{
+  state = {
+    count: 0
+  }
+  add = () => {
+    this.setState({ count: this.state.count + 1 });
+  };
+  minus = () => {
+    this.setState({ count: this.state.count + 1});
+  };
+  render(){
+    return (
+    <div>
+      <h1>The number is: {this.state.count}</h1>
+      <button onClick={this.add}>Add</button>  
+      <button onClick={this.minus}>Minus</button>  
+    </div>
+    )
+  };
+}
+```
+
+setState는 새로운 State를 취해야한다. 그전에 state는 object이기 때문에 setState는 새로운 state를 받아야하고, 따라서 setstate({count:1})과 같이 작성한다.
+
+**setState를 호출하면 react는 state를 refresh하고 또한 render function을 호출할 것이다.**
+
+
+
+결과를 확인해보면 react는 virtual DOM을 가지고 있기 때문에 변한 부분만 수정되어 깜빡이지 않는다.
+
+
+
+위 `this.state.count` 방식은 state에 의존하게 되어서 react는 현재 state를 함수 방식으로 가져오는 것을 허락해줬다.
+
+```javascript
+  add = () => {
+    this.setState(current => ({ count: current.count + 1 }));
+  };
+  minus = () => {
+    this.setState(current => ({ count: current.count - 1}));
+  };
+```
+
+이 방식이 state를 set할 때, react에서 외부의 상태에 의존하지 않는 가장 좋은 방법이다.
+
