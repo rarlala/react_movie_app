@@ -37,7 +37,7 @@ index.js에서 `ReactDOM.render(<App />, document.getElementById('apple'));` 에
 - component 만드는 방법
   - src에 새로운 file 만들기 // Potato.js
 
-  - ```javascript
+  - ```react
     // react에게 jsx가 있는 component 사용을 알리기
     import React from "react";
     
@@ -86,7 +86,7 @@ food component에 kimchi라는 value로 prop(property) name(kimchi)을 줌
 
 App()에서 해당 배열을 return 하는데, javascript의 map함수를 사용한다.
 
-```javascript
+```react
 function App() {
   return (
   <div>
@@ -98,7 +98,7 @@ function App() {
 
 Food()에서 props들을 적절히 받고 return한다.
 
-```javascript
+```react
 function Food({name, picture}){  
   return (
     <div>
@@ -113,7 +113,7 @@ function Food({name, picture}){
 
 추가적으로 위에 App()에 작성했던 코드를 함수를 호출하는 방식으로 아래와 같이 변경할 수 있다.
 
-```javascript
+```react
 function renderFood(dish){
   return <Food key={dish.id} name={dish.name} picture={dish.image} />
 }
@@ -143,7 +143,7 @@ function App() {
 
 - 사용방법
 
-```javascript
+```react
 import PropTypes from "prop-types"
 
 // 내가 얻고 싶은 props에 대한 설명을 적음
@@ -176,7 +176,7 @@ Food.propTypes = {
 
 Class component를 사용하는 이유는 Class component가 가진 state 때문이다.
 
-```javascript
+```react
 // Function component
 function App() {
 }
@@ -207,7 +207,7 @@ class App extends React.Component{
 
 1) 바꿀 데이터를 state 안에 집어넣기
 
-```javascript
+```react
 class App extends React.Component{
     state = {
         count: 0
@@ -219,7 +219,7 @@ class App extends React.Component{
 
 2) App class 내 render에는 class라 {state}가 아닌 {this.state.count}라고 적어야 함
 
-```javascript
+```react
 class App extends React.Component{
     state = {
         count: 0
@@ -238,7 +238,7 @@ class App extends React.Component{
 
 버튼이 클릭되면 보여지도록 하기 위해 react의 onClick props를 사용한다.
 
-```javascript
+```react
 class App extends React.Component{
     state = {
         count: 0
@@ -277,7 +277,7 @@ react는 우리가 setState function을 호출하면, react는 매우 똑똑해�
 
 아래와 같이 코드를 바꿔보자
 
-```javascript
+```react
 class App extends React.Component{
   state = {
     count: 0
@@ -312,7 +312,7 @@ setState는 새로운 State를 취해야한다. 그전에 state는 object이기 
 
 위 `this.state.count` 방식은 state에 의존하게 되어서 react는 현재 state를 함수 방식으로 가져오는 것을 허락해줬다.
 
-```javascript
+```react
   add = () => {
     this.setState(current => ({ count: current.count + 1 }));
   };
@@ -362,7 +362,7 @@ react class component는 단순히 render말고 더 많은 것을 가지고 있�
 
 
 
-```javascript
+```react
 class App extends React.Component{
   constructor(props){
     super(props)
@@ -427,7 +427,7 @@ class App extends React.Component{
 
 
 
-```javascript
+```react
 class App extends React.Component{
   constructor(props){
     super(props)
@@ -481,7 +481,7 @@ component가 죽는 것을 의미한다. (페이지를 바꿀 때 등)
 
 
 
-```javascript
+```react
 class App extends React.Component{
   constructor(props){
     super(props)
@@ -538,7 +538,7 @@ class App extends React.Component{
 
 - 처음에 render를 하면 호출되는 life cycle method인 **componentDidMount**에 변화를 넣어보자. (이 함수는  component가 mount되자마자 호출된다.)
 
-```javascript
+```react
 class App extends React.Component{
   state = {
     isLoading: true
@@ -570,3 +570,89 @@ class App extends React.Component{
 - componentDidMount에서 data를 fetch 하는 것
 
 - API로 부터 data fetching이 완료되면 movie를 Render하고 map을 만들고 movie를 render하기
+
+
+
+## react에서 data를 fetching하기
+
+Axios는 fetch위에 있는 작은 layer이다.
+
+
+
+### axios를 사용하기 위해 axios를 설치한 후 import
+
+`npm install axios`
+
+```react
+import axios from 'axios';
+```
+
+
+
+### API 가져오기
+
+우리가 사용할 API는 YTS에서 만든 API를 사용할 것이다.
+
+https://yts.lt/api 접속 > `list Movies` 클릭>  https://yts.lt/api/v2/list_movies.json 복사
+
+
+
+근데 이 사이트는 불법사이트라 매번 url이 변경되기 때문에 니콜라스가 YTS proxy API를 만들었다.
+
+https://yts-proxy.now.sh/list_movies.json를 사용하면된다.
+
+
+
+### axios로 위 API 사용하기
+
+```react
+class App extends React.Component{
+  state = {
+    isLoading: true,
+    movies: []
+  };
+  componentDidMount(){
+    const movies = axios.get("https://yts-proxy.now.sh/list_movies.json")
+  }
+  render() {
+    const { isLoading } = this.state;
+    return <div>{isLoading ? "Loading" : "We are ready"}</div>
+  }
+}
+```
+
+
+
+componentDidMount 함수가 끝날 때까지 약간 시간이 걸릴 수 있다.
+
+우리는 함수가 끝난 뒤 작업을 처리해야하기 때문에 javascript에게 기다리라고 말해야 한다.
+
+따라서 async-await을 활용해 비동기 처리를 진행한다.
+
+
+
+### async-await을 활용해 비동기 처리
+
+```react
+class App extends React.Component{
+  state = {
+    isLoading: true,
+    movies: []
+  };
+  getMovies = async() => {
+    const movies = await axios.get("https://yts-proxy.now.sh/list_movies.json")
+  };
+  async componentDidMount(){
+    this.getMovies();
+  }
+  render() {
+    const { isLoading } = this.state;
+    return <div>{isLoading ? "Loading" : "We are ready"}</div>
+  }
+}
+```
+
+
+
+
+
