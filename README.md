@@ -524,3 +524,49 @@ class App extends React.Component{
 >
 > 현 코드에서 작동을 확인할 수 없지만 component가 떠날 때 호출된다.
 
+
+
+
+
+## movie component 구성해보기
+
+
+
+- state에 isLoading: true
+
+- render하기
+
+- 처음에 render를 하면 호출되는 life cycle method인 **componentDidMount**에 변화를 넣어보자. (이 함수는  component가 mount되자마자 호출된다.)
+
+```javascript
+class App extends React.Component{
+  state = {
+    isLoading: true
+  };
+  componentWillMount(){
+    setTimeout(() => {
+      this.setState({isLoading: false})
+    }, 6000)
+  }
+  render() {
+    const { isLoading } = this.state;
+    return <div>{isLoading ? "Loading" : "We are ready"}</div>
+  }
+}
+```
+
+위 코드를 확인해보면 6초 뒤에 "We are ready"로 text가 바뀜을 확인할 수 있다.
+
+
+
+> 미래에 쓰고자 하는 state를 선언하는 것은 필수가 아니다.
+>
+> state에 작성하는 것은 단지 미래를 위한 계획일 뿐이다.
+
+
+
+이제 확인해봤으니 movie component 구성을 위해 해야할 일
+
+- componentDidMount에서 data를 fetch 하는 것
+
+- API로 부터 data fetching이 완료되면 movie를 Render하고 map을 만들고 movie를 render하기
