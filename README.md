@@ -149,3 +149,105 @@ Food.propTypes = {
 얻고자 하는 PropType을 위와같이 적게되면 얻고자 하는 정보와 다를 경우 console.log에 에러메세지가 나타나며, 반드시 이름은 propTypes으로 지어야한다.
 
 이외에 설정할 수 있는 항목들은 document를 확인하자. (https://doc.ebichu.cc/react/docs/typechecking-with-proptypes.html)
+
+
+
+## State
+
+- state는 보통 우리가 동적 데이터와 함께 작업할 때 만들어진다. 변하는 데이터, 존재하지 않는 데이터를 의미한다.
+
+- state는 object이다. component는 data를 넣을 공간이 있고 이 데이터는 변한다.
+
+
+
+### Function component와 Class component
+
+우선 지금까지 사용했던 Function component를 Class component로 바꿔보자.
+
+Class component를 사용하는 이유는 Class component가 가진 state 때문이다.
+
+```javascript
+// Function component
+function App() {
+}
+
+// Class component
+class App extends React.Component{ 
+}
+```
+
+
+
+**Function component**
+
+- function이고 뭔가를 return한다. 그리고 screen에 표시된다.
+
+
+
+**Class component**
+
+- classd이고 react component로부터 확장되고, screen에 표시된다.
+
+- return 을 가지고 있지 않다. render 메소드를 가지고 있다.
+- react는 자동적으로 모든 class component의 render method를 실행한다.
+
+
+
+### state를 사용하여 counter 구현하기
+
+1) 바꿀 데이터를 state 안에 집어넣기
+
+```javascript
+class App extends React.Component{
+    state = {
+        count: 0
+    }
+}
+```
+
+
+
+2) App class 내 render에는 class라 {state}가 아닌 {this.state.count}라고 적어야 함
+
+```javascript
+class App extends React.Component{
+    state = {
+        count: 0
+    }
+	render(){
+        return(
+        	<h1>The number is: {this.state.count}</h1>
+        )
+    }
+}
+```
+
+
+
+3) button 클릭 시에 count가 변하도록 Add, Minus button과 함수 추가하기
+
+버튼이 클릭되면 보여지도록 하기 위해 react의 onClick props를 사용한다.
+
+```javascript
+class App extends React.Component{
+    state = {
+        count: 0
+    }
+	add = () => {
+        console.log('add');
+    }
+    minus = () => {
+        console.log('minus');
+    }
+	render(){
+        return (
+        	<div>
+            	<h1>The number is {this.state.count}</h1>
+				<button onClick={this.add}>Add</button>
+				<button onClick={this.minus}>Minus</button>
+            </div>
+        )
+    }
+}
+```
+
