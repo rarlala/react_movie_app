@@ -788,3 +788,98 @@ export default App;
 ```
 
 여기까지 하면 title 목록이 정상적으로 출력된다.
+
+
+
+이제 HTML을 변경해 가져온 movie data를 모두 출력해보자.
+
+```react
+# App.js
+
+import React from 'react';
+import axios from 'axios';
+import Movie from './Movie';
+import "./App.css"
+
+class App extends React.Component{
+
+  state = {
+    isLoading: true,
+    movies: []
+  };
+
+  getMovies = async() => {
+    const {data:{data:{movies}}} = await axios.get("https://yts-proxy.now.sh/list_movies.json?sort_by=rating");
+    this.setState({movies, isLoading: false});
+  };
+
+  componentDidMount(){
+    this.getMovies();
+  };
+
+  render() {
+    const { isLoading, movies } = this.state;
+      return (
+        <section className="container">
+          {isLoading
+            ? <div className="loader">
+                <span className="loader__text">Loading...</span>
+              </div>
+            : (
+              <div className="movies">
+                {movies.map(movie => (
+                <Movie
+                  key={movie.id}
+                  id={movie.id}
+                  year={movie.year}
+                  title={movie.title}
+                  summary={movie.summary}
+                  poster={movie.medium_cover_image}
+                  genres={movie.genres}
+                />
+                ))}
+              </div>
+            )}
+        </section>
+    );
+  };
+}
+
+export default App;
+```
+
+
+
+```react
+# Movie.js
+
+import React from "react";
+import PropTypes from "prop-types";
+import "./Movie.css"
+
+function Movie({ year, title, summary, poster, genres}) {
+  return <div className="movie">
+    <img src={poster} alt={title} title={title} />
+    <div className="movie__data">
+      <h3 className="movie__title">{title}</h3>
+      <h5 className="movie__year">{year}</h5>
+      <ul className="genres">
+        {genres.map((genre, index) => <li key={index} className="genres__genre">{genre}</li>)}
+      </ul>
+      <p className="movie__summary">{summary}</p>
+    </div>
+  </div>
+  
+}
+
+Movie.propTypes = {
+  id: PropTypes.number.isRequired,
+  year: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  summary: PropTypes.string.isRequired,
+  poster: PropTypes.string.isRequired,
+  genres: PropTypes.arrayOf(PropTypes.string).isRequired
+};
+
+export default Movie;
+```
