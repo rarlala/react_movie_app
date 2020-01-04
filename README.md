@@ -883,3 +883,70 @@ Movie.propTypes = {
 
 export default Movie;
 ```
+
+
+
+
+
+## HTML/CSS 작업
+
+간단하게 html/css 추가작업 및 summary slice 작업을 수행한다.
+
+코드 참고: https://github.com/JEONGSUJI/ReactJS/commit/e811b96cffd10b28c6b385d3fd9851859928d327
+
+
+
+
+
+## gh-pages
+
+github는 무료 웹사이트를 제공하는데, static 웹사이트, HTML, CSS, Javascript 웹사이트가 무료로 제공된다.
+
+
+
+#### github에 업로드하는 것을 허가해주는 모듈 `npm i gh-pages` 설치하기
+
+gh-pages는 나의 웹사이트를 github의 github page 도메인에 나타나게 해줄 것이다.
+
+
+
+package.json에 설정을 해주어야한다.
+
+- 우선 "homepage" 설정을 해줘야 한다. 단, 모두 소문자여야한다.
+
+- "scripts"에  "deploy": "gh-pages -d build"와 *"predeploy"*: "npm run build"를 추가해준다.
+
+```javascript
+# package.json
+
+
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build"
+  },
+
+
+  "homepage": "https://{your github username}.github.io/{the name of your project is github}"
+```
+
+
+
+`유저명.github.io/프로젝트명` 
+
+
+
+### `npm run build`
+
+build 폴더가 생성되고, 우리가 작성한 코드가 최소화되어 build 폴더에 들어가 있음을 확인할 수 있다.
+
+
+
+### `npm run deploy`
+
+predeploy가 먼저 실행된 후 deploy가 실행된다.
+
+완료창이 나오면 브라우저에서 위에 작성한 `https://{your github username}.github.io/{the name of your project is github}`주소로 들어간다.
+
+우리가 작업한 화면이 출력됨을 확인할 수 있다~! :) 
