@@ -11,6 +11,8 @@ create-react-app을 사용하여 react 환경세팅
 
 
 
+
+
 ## React란?
 
 - react란 내가 쓰는 모든 요소를 생성한다는 것이다.
@@ -18,6 +20,8 @@ create-react-app을 사용하여 react 환경세팅
 - react는 소스코드에 처음부터 HTML을 넣지 않고, HTML에서 HTML을 추가하거나 제거하는 방법을 알고 있다. component에 작성해두었던 것들을 react가 HTML에 추가한다.
 - react는 virtual DOM(virtual document object model)이라는 것이 있다. 즉 소스코드에는 존재하지 않지만 react가 만들어낸다. 이것이 react가 빠른 이유이다.
 - react가 멋진 이유는 재사용 가능한 component를 만들 수 있다는 점이다. (component를 계속해서 반복해서 사용할 수 있다는 것)
+
+
 
 
 
@@ -51,6 +55,8 @@ index.js에서 `ReactDOM.render(<App />, document.getElementById('apple'));` 에
 
 
 - react application이 한번에 하나의 component만을 rendering 할 수 있다. 따라서 모든 것은 application안에 들어가야한다.
+
+
 
 
 
@@ -123,6 +129,8 @@ function App() {
 
 
 
+
+
 ## Protection with PropTypes
 
 
@@ -149,6 +157,8 @@ Food.propTypes = {
 얻고자 하는 PropType을 위와같이 적게되면 얻고자 하는 정보와 다를 경우 console.log에 에러메세지가 나타나며, 반드시 이름은 propTypes으로 지어야한다.
 
 이외에 설정할 수 있는 항목들은 document를 확인하자. (https://doc.ebichu.cc/react/docs/typechecking-with-proptypes.html)
+
+
 
 
 
@@ -312,4 +322,205 @@ setState는 새로운 State를 취해야한다. 그전에 state는 object이기 
 ```
 
 이 방식이 state를 set할 때, react에서 외부의 상태에 의존하지 않는 가장 좋은 방법이다.
+
+
+
+
+
+## Component Life Cycle
+
+react component에서 사용하는 유일한 function은 render function이다.
+
+react class component는 단순히 render말고 더 많은 것을 가지고 있다.
+
+이들은 life cycle method를 가지는데, life cycle method는 기본적으로 react가 component를 생성 및 삭제하는 방법이다.
+
+
+
+정말 많지만 그 중 몇개만 확인 해볼 것이다.
+
+(Document link : https://reactjs.org/docs/react-component.html#componentdidmount)
+
+
+
+### 1) mounting
+
+생성되는 것을 의미한다.
+
+
+
+- **constructor()**                                            // 먼저 호출되는 function
+
+  ​																	// constructor는 react에서 온게 아니고 Javascript왔다.
+
+  ​																    // class를 만들 때 호출되는 것이다.
+
+- static getDerivedStateFromProps()  	// 강좌에서 다루지 않음
+
+- **render()**
+- **componentDidMount()**
+
+
+
+```javascript
+class App extends React.Component{
+  constructor(props){
+    super(props)
+    console.log("Hello");
+  }
+  state = {
+    count: 0
+  }
+  add = () => {
+    this.setState(current => ({ count: current.count + 1 }));
+  };
+  minus = () => {
+    this.setState(current => ({ count: current.count - 1}));
+  };
+  componentDidMount(){
+    console.log("component render");    
+  }
+  render(){
+    console.log("I'm rendering");
+    return (
+    <div>
+      <h1>The number is: {this.state.count}</h1>
+      <button onClick={this.add}>Add</button>  
+      <button onClick={this.minus}>Minus</button>  
+    </div>
+    )
+  };
+}
+```
+
+위 코드를 실행시키면 console에 render 전 'Hello'가 먼저 출력됨을 확인할 수 있다.
+
+
+
+> **작동방식 요약**
+>
+> component가 mount될 때, component가 screen에 표시될 때, component가 나의 Website에 갈 때, constructor를 호출한다. 그 후 render한다. 이후 component가 render할 때 componentDidMount()가 기본적으로 나에게 "이 component는 처음 render 되었어"를 알려준다.
+
+
+
+
+
+### 2) Updating
+
+업데이트를 의미한다. 
+
+업데이트의 원인은 나다. 위 코드에서 Add, Minus를 클릭해서 state를 변경할 때 그게 업데이트 이다.
+
+
+
+- static getDerivedStateFromProps()  	 // 강좌에서 다루지 않음
+
+- shouldComponentUpdate()                   // 강좌에서 다루지 않음, 업데이트할지 말지 결정하는 것임
+
+  ​																	// setState를 호출할때마다 발생함
+
+- **render()**
+
+- getSnapshotBeforeUpdate()                  // 강좌에서 다루지 않음
+
+- **componentDidUpdate()**
+
+
+
+```javascript
+class App extends React.Component{
+  constructor(props){
+    super(props)
+    console.log("Hello");
+  }
+  state = {
+    count: 0
+  }
+  add = () => {
+    this.setState(current => ({ count: current.count + 1 }));
+  };
+  minus = () => {
+    this.setState(current => ({ count: current.count - 1}));
+  };
+  componentDidMount(){
+    console.log("component render");    
+  }
+  componentDidUpdate(){
+    console.log("I just update");
+  }
+  render(){
+    console.log("I'm rendering");
+    return (
+    <div>
+      <h1>The number is: {this.state.count}</h1>
+      <button onClick={this.add}>Add</button>  
+      <button onClick={this.minus}>Minus</button>  
+    </div>
+    )
+  };
+}
+```
+
+위 코드 작성 후 실행 시 Add, Minus 버튼을 클릭하면 console에 "I just update"가 출력됨
+
+
+
+> **작동방식 요약**
+>
+> setState를 호출하면, component를 호출하고 먼저 render가 호출한 다음 업데이트가 완료되었다고 말하면 componentDidUpdate가 실행된다.
+
+
+
+
+
+### 3) Unmounting
+
+component가 죽는 것을 의미한다. (페이지를 바꿀 때 등)
+
+- **componentWillUnmount()** 					// component가 떠날 때 호출된다.
+
+
+
+```javascript
+class App extends React.Component{
+  constructor(props){
+    super(props)
+    console.log("Hello");
+  }
+  state = {
+    count: 0
+  }
+  add = () => {
+    this.setState(current => ({ count: current.count + 1 }));
+  };
+  minus = () => {
+    this.setState(current => ({ count: current.count - 1}));
+  };
+  componentDidMount(){
+    console.log("component render");    
+  }
+  componentDidUpdate(){
+    console.log("I just update");
+  }
+  componentWillUnmount(){
+    console.log("Goodbye, cruel world");
+  }
+  render(){
+    console.log("I'm rendering");
+    return (
+    <div>
+      <h1>The number is: {this.state.count}</h1>
+      <button onClick={this.add}>Add</button>  
+      <button onClick={this.minus}>Minus</button>  
+    </div>
+    )
+  };
+}
+```
+
+
+
+> **작동방식 요약**
+>
+> 현 코드에서 작동을 확인할 수 없지만 component가 떠날 때 호출된다.
 
