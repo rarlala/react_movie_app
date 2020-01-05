@@ -1173,6 +1173,134 @@ export default Navigation;
 
 
 
+보다시피 모든 컴포넌트에는 props가 있다. 라우터에 있는 모든 라우트들은 기본값으로 props를 가진다.
+
+중요한 것은 props를 사용할 수 있다. 클릭으로 정보를 보낼 수 있다는 것이다.
+
+
+
+공식문서에 가보면 Link to는 object나 string으로 보내는것을 허락해준다.
+
+그래서 우리는 Naviagation에 작성한 내용을 수정해서 /about 클릭 시 정보도 함께 담아보내도록 해보겠다.
+
+```react
+      <Link to={{
+        pathname:"/about",
+        state: {
+          fromNavigation: true
+        }
+      }}>About</Link>
+```
+
+위 코드는 우리가 About을 클릭하면 리액트 라우터는 /about으로 데려가고 component와 props를 보내주게 된다.  route로 정보를 보내주고 있는 것이다.
+
+
+
+위 코드는 설명을 위한 것으로 불필요하니 다시 아래코드로 되돌려 놓자.
+
+```react
+<Link to={"/about"}>About</Link>
+```
+
+
+
+이제 Movie Component Link를 만들자.
+
+```react
+// Movie.js
+
+import React from "react";
+import {Link} from "react-router-dom";
+import PropTypes from "prop-types";
+import "./Movie.css"
+
+function Movie({ year, title, summary, poster, genres}) {
+  return (
+    <Link to={{
+      pathname:'/movie-detail',
+      state: {
+        year,
+        title,
+        summary,
+        poster,
+        genres
+      }
+    }}>
+      <div className="movie">
+        <img src={poster} alt={title} title={title} />
+        <div className="movie__data">
+          <h3 className="movie__title">{title}</h3>
+          <h5 className="movie__year">{year}</h5>
+          <ul className="movie__genres">
+            {genres.map((genre, index) => 
+            <li key={index} className="genres__genre">{genre}</li>)}
+          </ul>
+          <p className="movie__summary">{summary.slice(0, 180)}...</p>
+        </div>
+      </div>
+  </Link>)
+}
+
+Movie.propTypes = {
+  id: PropTypes.number.isRequired,
+  year: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  summary: PropTypes.string.isRequired,
+  poster: PropTypes.string.isRequired,
+  genres: PropTypes.arrayOf(PropTypes.string).isRequired
+};
+
+export default Movie;
+```
+
+
+
+```react
+// routes/Detail.js 생성 후 아래 코드 추가
+
+import React from "react";
+
+function Detail(props){
+  console.log(props);
+  return <span>Hello</span>;
+}
+
+export default Detail;
+```
+
+
+
+```react
+// App.js
+
+import React from "react";
+import { HashRouter, Route } from "react-router-dom";
+import Home from "./routes/Home";
+import About from "./routes/About";
+import Detail from "./routes/Detail";
+import Navigation from "./components/Navigation";
+import "./App.css";
+
+function App(){
+  return (
+    <HashRouter>
+      <Navigation />
+      <Route path="/" exact={true} component={Home}/>
+      <Route path="/about" component={About}/>
+      <Route path="/movie-detail" component={Detail}/>
+    </HashRouter>
+  );
+}
+
+export default App;
+```
+
+위 코드를 실행하면 Home화면에서 특정 Movie를 클릭했을 때 movie-detail page로 가는 것을 확인할 수 있다.
+
+또한 console에서 location > state를 보면 우리가 Link to로 보낸 data들이 넘어왔음을 확인할 수 있다.
+
+
+
 ---
 
 **수업을 마치며 추가 안내사항**
