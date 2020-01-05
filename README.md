@@ -1301,6 +1301,106 @@ export default App;
 
 
 
+이제 넘어온 data를 원하는 형태로 뿌려줘보자.
+
+- 우선 function componen를 class component로 바꾼다.
+
+- home에서 클릭해서 들어오면 location이 정상적으로 들어오나, 그냥 새로고침해서 바로 movie-detail에 오면 location이 undefined이기 때문에 조건 처리를 해준다. 만약 location이 undefined이면 home으로 redirect할 것인데, 우리는 **history**를 이용하면 쉽게 처리할 수 있다.
+
+
+
+**history**에는 여러가지가 있다. go, goBack, goForward... 이것들이 url을 변경한다.
+
+그 뜻은 이제 웹사이트가 어디있는지 장소를 바꿀 수 있다는 것이다.
+
+
+
+```react
+import React from "react";
+import Home from "./Home";
+
+class Detail extends React.Component{
+  componentDidMount(){
+    const {location, history} = this.props;
+    if(location.state === undefined){
+      history.push("/");
+    }
+  }
+  render() {
+    return <span>Hello</span>;
+  }
+}
+
+export default Detail;
+```
+
+(+. Movie.css와 Movie.js도 약간 수정되었는데, commit 이력을 참고하자)
+
+
+
+그 다음으로는 가져온 데이터를 뿌려줄 것인데, 아래와 같이 코드를 수정해보자
+
+```react
+import React from "react";
+import Home from "./Home";
+
+class Detail extends React.Component{
+  componentDidMount(){
+    const {location, history} = this.props;
+    if(location.state === undefined){
+      history.push("/");
+    }
+  }
+  render() {
+    const {location} = this.props;
+    return (
+      <span>{location.state.title}</span>
+    );
+  }
+}
+
+export default Detail;
+```
+
+이렇게 코드를 짜게되면 문제는 render이후 componentDidMount가 실행되기 때문에 Error가 발생한다.
+
+이 문제를 해결하기 위한 2가지 방법이 있다.
+
+
+
+**1) 간단하게 체크하기**
+
+```react
+  render() {
+    const {location} = this.props;
+    if(location.state){
+      return <span>{location.state.title}</span>;
+    } else {
+      return null;
+    }
+  }
+```
+
+
+
+**2) /movie/:id를 활용하기**
+
+App.js에서 아래 코드와 같이 변경
+
+```react
+<*Route* path="/movie/:id" component={Detail}/>
+```
+
+
+
+Movie.js에서 `id` props 추가 후 아래 코드와 같이 변경
+
+```react
+pathname:'/movie/${id}',
+```
+
+
+
 ---
 
 **수업을 마치며 추가 안내사항**
