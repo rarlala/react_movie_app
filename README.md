@@ -1097,6 +1097,82 @@ React Router는 기본적으로 url을 가져온다. 그다음 라우터를 비�
 
 
 
+이제 nav를 만들어보자
+
+```react
+// App.js
+
+import React from "react";
+import { HashRouter, Route } from "react-router-dom";
+import Home from "./routes/Home";
+import Navigation from "./components/Navigation";
+import About from "./routes/About";
+
+function App(){
+  return (
+    <HashRouter>
+      <Navigation />
+      <Route path="/" exact={true} component={Home}/>
+      <Route path="/about" component={About}/>
+    </HashRouter>
+  );
+}
+
+export default App;
+
+```
+
+
+
+```react
+// components/Navigation.js 생성
+
+import React from "react";
+
+function Navigation(){
+  return (
+    <div>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+    </div>
+  )
+}
+
+export default Navigation;
+```
+
+위와 같이 코드를 작성하면, nav를 클릭했을때 새로고침되는 문제가 발생한다. html이기 때문이다.
+
+
+
+위 문제를 해결하기 위해 우리는 **Link**를 불러와 사용할 것이다.
+
+```react
+// components/Navigation.js
+
+import React from "react";
+import { Link } from "react-router-dom";
+
+function Navigation(){
+  return (
+    <div>
+      <Link to="/">Home</Link>
+      <Link to="/about">About</Link>
+    </div>
+  )
+}
+
+export default Navigation;
+```
+
+위와 같이 코드를 변경해주면 Home에서 Home을 클릭하면 새로고침이 이루어지지 않고 잘 동작하는 것을 확인할 수 있다.
+
+
+
+**Router 밖에서 Link를 사용할 수 없다는 것을 기억하자**
+
+
+
 ---
 
 **수업을 마치며 추가 안내사항**
