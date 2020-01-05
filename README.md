@@ -1401,8 +1401,26 @@ pathname:'/movie/${id}',
 
 
 
+
+
+## redux
+
+마지막으로! home에서 about에 간 뒤 home으로 돌아오면 다시 loading이 되는데 이것은 home에 state가 갇혀있기 때문이다. 그래서 about 링크로 이동해 home.js가 사라지면 home에 state가 비어있기에 다시 데이터를 불러와야하는 것이다. 이는 별로 좋은 방식이 아니기에 우리는 **redux**를 활용해서 이 현상을 해결할 수 있다.
+
+
+
+redux는 state를 저장한다(화면 밖에 있도록 도와줌) . 로딩이 한번만 발생하도록 도와주는 것이다.
+
+기본적으로 movie list 등을 다른 장소에 저장해놨다가, 내가 about에 갔다가 다시 홈으로 돌아와도 state가 저장되어있기 때문에 loading을 보지 않아도 된다.
+
+
+
+
+
 ---
 
 **수업을 마치며 추가 안내사항**
 
 - **react hook**의 등장으로 더 이상 state를 갖기 위해 class component를 가질 필요가 없다.
+
+- redux를 추가적으로 공부해 loading 현상을 해결해보기
