@@ -955,18 +955,6 @@ predeploy가 먼저 실행된 후 deploy가 실행된다.
 
 
 
-## react-router-dom으로 nav만들기
-
-react-router dom은 네비게이션을 만들어주는 패키지이다.
-
-
-
-`npm install react-router-dom` 설치하기
-
-
-
-
-
 ## 폴더 구조 변경하기
 
 ```react
@@ -989,9 +977,123 @@ movie_app
 
 router 설정 전 코드를 아래와 같이 수정
 
+https://github.com/rarlala/react_movie_app/commit/268455659bfd8692be11b6386f34b438d5265be6
 
 
 
+
+
+## react-router-dom으로 nav만들기
+
+react-router dom은 네비게이션을 만들어주는 패키지이다.
+
+- `npm install react-router-dom` 설치하기
+
+
+
+**Router**는 url을 가져다가, 확인하고, 우리가 Router에게 뭘 명령했는지에 따라 라우터가 컴포넌트를 불러오게 된다.
+
+
+
+**react-router-dom**은 다른 종류의 라우터들이 있다. 그 중에 우리는 HashRouter를 사용할 것이기 때문에 import해준다. HashRouter 안 속에 Route를 넣어줄 것이다. Route에는 매우 중요한 props가 한 개 들어가는데, 그 props는 렌더링할 스크린이 들어가고, 다른 prop은 뭘 할지 정해주는 것이다.
+
+
+
+```react
+// App.js
+
+import React from "react";
+import { HashRouter, Route } from "react-router-dom";
+import About from "./routes/About"
+
+function App(){
+  return <HashRouter>
+    <Router path="/about" component={About}/>
+  </HashRouter>;
+}
+
+export default App;
+```
+
+
+
+현재 About.js는 비어있으므로 빠르게 component를 만들어보자.
+
+```react
+// About.js
+
+import React from "react";
+
+function About(){
+  return <span>About this page: I built it</span>
+}
+
+export default About;
+```
+
+위와 같이 코드 작성 후 화면을 돌아가보면 
+
+
+
+다시 App.js로 돌아와서 추가적으로 Route 설정을 해주자
+
+```react
+import React from "react";
+import { HashRouter, Route } from "react-router-dom";
+import Home from "./routes/Home";
+import About from "./routes/About";
+
+function App(){
+  return (
+    <HashRouter>
+      <Route path="/" component={Home}/>
+      <Route path="/about" component={About}/>
+    </HashRouter>
+  );
+}
+
+export default App;
+
+```
+
+이 코드를 작성 후 /에 접근 시 home이 잘 표시되지만, /about 접근 시 about이 home에 겹쳐서 표시된다.
+
+이게 리액트 라우터가 작동하는 방식이기 때문이다.
+
+
+
+보기 쉬운 형태로 코드를 바꿔 이유를 알아보자
+
+```react
+function App(){
+  return (
+    <HashRouter>
+      <Route path="/">
+        <h1>Home</h1>
+      </Route>
+      <Route path="/about">
+        <h1>About</h1>
+      </Route>
+    </HashRouter>
+  );
+}
+```
+
+만약 Router path가 '/'가 아니라 '/home'처럼 다른 url이라면 겹치지 않고 표시된다.
+
+React Router는 기본적으로 url을 가져온다. 그다음 라우터를 비교한다. 그리고 매치가 된다면 컴포넌트를 보여준다. 그리고 매치가 되는 것도 있는지 계속 찾는다.
+
+그러다보니 '/'를 찾을때 '/about'도 '/'가 매치되기 때문에 겹쳐서 보이는 것이다.
+
+
+
+이 현상을 해결하기 위한 방법은 exact true를 첫번째 route에 추가해주는 것이다.
+
+```react
+<Route path="/" exact={true} component={Home}/>
+```
+
+그러면 url이 '/'일때만, home을 렌더링해준다.
 
 
 
