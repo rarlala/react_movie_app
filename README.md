@@ -70,7 +70,7 @@ component에서 component로, children component로 정보를 보내는 방법 �
 component는 대문자로 시작해야한다. 우리는 component로 정보를 보낼 수 있다.
 jsx는 html처럼 사용한다.
 
-<Food name="kimchi" />
+`<Food name="kimchi" />`
 food component에 kimchi라는 value로 prop(property) name(kimchi)을 줌
 그 다음 food function component의 argument로 그것들을 넣음
 
@@ -950,3 +950,53 @@ predeploy가 먼저 실행된 후 deploy가 실행된다.
 완료창이 나오면 브라우저에서 위에 작성한 `https://{your github username}.github.io/{the name of your project is github}`주소로 들어간다.
 
 우리가 작업한 화면이 출력됨을 확인할 수 있다~! :) 
+
+
+
+
+
+## react-router-dom으로 nav만들기
+
+react-router dom은 네비게이션을 만들어주는 패키지이다.
+
+
+
+`npm install react-router-dom` 설치하기
+
+
+
+
+
+## 폴더 구조 변경하기
+
+```react
+movie_app
+	ㄴ build
+	ㄴ node_modules
+	ㄴ public
+	ㄴ src
+		ㄴ components		// 폴더 추가 및 아래 파일 해당 폴더로 이동
+			ㄴ Movie.css
+			ㄴ Movie.js
+			ㄴ Home.css		// App.css -> Home.css 이름 변경
+
+        ㄴ routes			// 폴더 추가 및 아래 파일 해당 폴더에 생성
+        	ㄴ About.js		// 특정 영화 클릭 시 해당 영화의 설명 페이지
+        	ㄴ Home.js		// 영화 목록 페이지
+```
+
+
+
+router 설정 전 코드를 아래와 같이 수정
+
+
+
+
+
+
+
+---
+
+**수업을 마치며 추가 안내사항**
+
+- **react hook**의 등장으로 더 이상 state를 갖기 위해 class component를 가질 필요가 없다.
